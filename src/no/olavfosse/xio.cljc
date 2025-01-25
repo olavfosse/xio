@@ -24,32 +24,21 @@
 ;; - https://github.com/weavejester/medley/blob/master/src/medley/core.cljc
 ;; - https://github.com/cgrand/xforms
 ;; I don't want to duplicate the functionality of these repos
-(defn slurp
-  "Opens a reader on f and reads all its contents, returning a string.
-  See clojure.java.io/reader for a complete list of supported arguments."
-  {:added "1.0"
-   :tag String}
-  ([f & opts]
-     (let [opts (normalize-slurp-opts opts)
-           sw (java.io.StringWriter.)]
-       (with-open [^java.io.Reader r (apply jio/reader f opts)]
-         (jio/copy r sw)
-         (.toString sw)))))
+
 (defn bslurp
   "Exactly the same as clojure.core/slurp except that it returns the raw
   binary data as a vector of bytes"
-  #?(:clj [f & opts]
-     (let [baos (ByteArrayOutputStream.)]
-       (with-open [^InputStream r (apply jio/input-stream f opts)]
-         (jio/copy r sw)
-         (ByteArrayInputStream sw))))
-    ;; TODO: should support same types as slurp
-  (->
-   #?(:clj ()
-      :lpy (with [f (open path "rb")]
-                 (.read f)))
-   ;; On the JVM this reuses the underlying array
-   vec))
+  [f & opts]
+  (vec
+   #?(:clj 
+      (let [baos (ByteArrayOutputStream.)]
+        (with-open [^InputStream r (apply jio/input-stream f opts)]
+          (jio/copy r baos)
+          ;; fwiw Clojure may reuse the underlying array here.
+          (ByteArrayOutputStream/.toByteArray baos)))
+      :lpy
+      (with [f (open path "rb")]
+            (.read f)))))
 
 
 ;; Resources:
@@ -67,3 +56,7 @@
 ;;
 ;; Also I need to figure out how the api should look. Will definitely
 ;; be transducer-first type shi.
+;;
+;; I really need to find the actual overlap of a bunch of IO systems.
+;;
+;; I think making this useful is easy, but getting to 1.0 is a big job.
