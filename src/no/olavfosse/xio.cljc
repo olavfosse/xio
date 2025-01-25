@@ -27,6 +27,10 @@
 ;; - https://github.com/cgrand/xforms
 ;; I don't want to duplicate the functionality of these repos
 
+
+
+;; IDEA: return a https://github.com/leonoel/clope
+
 (defn bslurp
   "Like clojure.core/slurp except that it returns the raw binary data as
   a vector of bytes, instead of as a string."
