@@ -31,20 +31,25 @@
 
 ;; IDEA: return a https://github.com/leonoel/clope
 
-(defn bslurp
-  "Like clojure.core/slurp except that it returns the raw binary data as
-  a vector of bytes, instead of as a string."
-  [f & opts]
-  (vec
-   #?(:clj 
-      (let [baos (ByteArrayOutputStream.)]
-        (with-open [^InputStream r (apply jio/input-stream f opts)]
-          (jio/copy r baos)
-          ;; fwiw Clojure may reuse the underlying array here.
-          (ByteArrayOutputStream/.toByteArray baos)))
-      :lpy
-      (with [f (open path "rb")]
-            (.read f)))))
+#?(:cljs nil
+   :default (defn bslurp
+              "Like clojure.core/slurp except that it returns the raw binary data as
+  a vector of bytes, instead of as a string.
+
+Uses 0-255 range for bytes, which is the same as python, but different from jvm where it is -128-127"
+              [f & opts]
+              (prn :BSLURPED)
+              (vec
+               #?(:clj 
+                  (let [baos (ByteArrayOutputStream.)]
+                    (with-open [^InputStream r (apply jio/input-stream f opts)]
+                      (jio/copy r baos)
+                      ;; fwiw Clojure may reuse the underlying array
+                      ;; if we pass it directly to vec.
+                      (mapv (partial + 128) (ByteArrayOutputStream/.toByteArray baos))))
+                  :lpy
+                  (with [f (open path "rb")]
+                        (.read f))))))
 
 #?(:clj (defn bspit
           "Like clojure.core/bspit except that it takes raw binary data as a seq
