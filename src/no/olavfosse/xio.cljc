@@ -4,7 +4,9 @@
                    java.nio.file.Files
                    java.io.ByteArrayOutputStream
                    java.io.InputStream
-                   java.io.ByteArrayInputStream))
+                   java.io.ByteArrayInputStream
+                   java.io.OutputStream
+                   java.io.OutputStreamWriter))
   #?(:clj (:require [clojure.java.io :as jio])))
 
 ;; The idea is to build on the host's IO APIs. Support the 80/20 of IO
@@ -26,8 +28,8 @@
 ;; I don't want to duplicate the functionality of these repos
 
 (defn bslurp
-  "Exactly the same as clojure.core/slurp except that it returns the raw
-  binary data as a vector of bytes"
+  "Like clojure.core/slurp except that it returns the raw binary data as
+  a vector of bytes, instead of as a string."
   [f & opts]
   (vec
    #?(:clj 
@@ -39,6 +41,13 @@
       :lpy
       (with [f (open path "rb")]
             (.read f)))))
+
+#?(:clj (defn bspit
+          "Like clojure.core/bspit except that it takes raw binary data as a seq
+  of bytes and writes to the specified file."
+          [f content & options]
+          (with-open [^OutputStream os (apply jio/output-stream f options)]
+            (OutputStream/.write os (byte-array content) 0 (count content)))))
 
 
 ;; Resources:
