@@ -53,10 +53,10 @@ Uses 0-255 range for bytes, which is the same as python, but different from jvm 
 
 #?(:clj (defn bspit
           "Like clojure.core/bspit except that it takes raw binary data as a seq
-  of bytes and writes to the specified file."
+  of bytes and writes to the specified file. "
           [f content & options]
           (with-open [^OutputStream os (apply jio/output-stream f options)]
-            (OutputStream/.write os (byte-array content) 0 (count content)))))
+            (OutputStream/.write os (byte-array (mapv (partial - 128) content)) 0 (count content)))))
 
 
 ;; Resources:
