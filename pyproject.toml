@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "basilisp-xio"
+version = "0.1"
+description = ""
+authors = ["Olav Fosse <post@olavfosse.no>"]
+readme = "readme.md"
+packages = [{include = "no", from = "src"}]
+
+[tool.poetry.dependencies]
+basilisp = "^0.3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -15,6 +15,12 @@
 ;;
 ;; :clj
 ;; - Build on nio
+;;
+;; Do some work in other repos like:
+;; - https://github.com/weavejester/medley/blob/master/src/medley/core.cljc
+;; - https://github.com/cgrand/xforms
+;; I don't want to duplicate the functionality of these repos
+
 
 (defn bslurp [path]
   (->
