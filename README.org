@@ -1,3 +1,4 @@
-* ParetIO
-- Support the 80/20 of IO use cases
-- Work across the 
+* xio
+- io library
+- support the 80/20 of io use cases
+- work across the major clojure hosts
