@@ -53,7 +53,7 @@
 
 Uses 0-255 range for bytes, which is the same as python, but different from jvm where it is -128-127"
               [f & opts]
-              (vec (apply bslurp f opts))))
+              (vec (apply bslurp-raw f opts))))
 
 #?(:clj (defn bspit
           "Like clojure.core/bspit except that it takes raw binary data as a seq
