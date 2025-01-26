@@ -84,3 +84,12 @@ Uses 0-255 range for bytes, which is the same as python, but different from jvm 
 ;; I really need to find the actual overlap of a bunch of IO systems.
 ;;
 ;; I think making this useful is easy, but getting to 1.0 is a big job.
+
+
+;; TODO:
+;; - tubes ala pwntools: Input
+;;   - stdio
+;;   - serial
+;;   - tcp
+;;   - ssh
+;;   - tls
