@@ -41,7 +41,9 @@
                      (jio/copy r baos)
                      ;; fwiw Clojure may reuse the underlying array
                      ;; if we pass it directly to vec.
-                     (mapv (partial + 128) (ByteArrayOutputStream/.toByteArray baos))))
+
+                     ;; .toByteArray returns bytes interpeted as twos comlement
+                     (mapv #(if (neg? %) (+ % 256) %) (ByteArrayOutputStream/.toByteArray baos))))
                  :lpy
                  (with [f (open path "rb")]
                        (.read f)))))
